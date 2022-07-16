@@ -1,23 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
+import Registration from './Registration';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="grid gap-4 grid-cols-2 w-11/12">
+          <div className="flex-1">
+              <Registration />
+          </div>
+      </div>
     </div>
   );
 }
