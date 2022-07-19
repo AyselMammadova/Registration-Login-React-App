@@ -10,7 +10,14 @@ function Registration() {
         password : ""
     });
 
-    const [records, setRecords] = useState([]);
+    const [records, setRecords] = useState([
+        {username: "Aysel", email: "aysel@mammad.com", password: "1e13", id: "3937rw73r9"}
+    ]);
+    
+
+    const [alert, setAlert] = useState(false);
+
+    const [login, setLogin] = useState(false);
 
     const handleInput = (e) => {
         const name = e.target.name;
@@ -19,63 +26,42 @@ function Registration() {
         setUserRegistration({...userRegistration, [name] : value})
     }
 
+    // useEffect(() => {
+
+    //     setRecords(JSON.parse(window.localStorage.getItem(records)));
+    
+    //   }, [records]);
+
+    
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const newRecord = {...userRegistration, id : new Date().getTime().toString()};
+        const {username, email, password} = userRegistration;
 
-        setRecords([...records, newRecord]);
-        // console.log(newRecord);
-        // console.log(records)
-        
+        if(!username || !email || !password) {
+            setAlert(true)
+        } else {
+            setAlert(false);
+
+            const newRecord = {...userRegistration, id : new Date().getTime().toString()};
+            
+            setRecords([...records, newRecord]);
+
+            localStorage.setItem("email", JSON.stringify(newRecord.email));
+            localStorage.setItem("password", JSON.stringify(newRecord.password));
+        }  
     }
 
-    console.log(records);
-
     useEffect(() => {
+        
         localStorage.setItem("records", JSON.stringify(records));
-    })
-
-    // useEffect(() => {
-    //     JSON.parse(localStorage.getItem("records")); 
-
-    //     console.log(JSON.parse(localStorage.getItem("records")));
-    // })
-    
-
-
-    // useEffect(() => {
-
-    //     const record= window.localStorage.getItem('userRegistration');
-
-    //     if(userRegistration !== '') {
-           
-    //         setUserRegistration(JSON.parse(record));
-    //         console.log(record);
-    //     }
-    //   }, []);
-    
-    //   useEffect(() => {
-    
-    //     window.localStorage.setItem('userRegistration', userRegistration);
-    
-    //   }, [userRegistration])
-
       
-
-    // useEffect(() => {
-    //     const records = JSON.parse(localStorage.getItem('records'));
-    //     if (records) {
-    //      setRecords(records);
-    //     }
-    //   }, []);
+    }, [records])
+    
 
     
-    // useEffect(() => {
-    //     localStorage.setItem('records', JSON.stringify(records));
-    //   }, [records]);
-
-      
 
 
     return (
@@ -84,7 +70,9 @@ function Registration() {
                 Qeydiyyat Formu
             </h2>
 
-            <div className="mt-8 border-2 border-solid border-gray-200 rounded-lg p-7 shadow-lg">
+            <div className={`mt-8 border-2 border-solid rounded-lg p-7 shadow-lg ${alert ? "border-red-500" : "border-gray-200"}`}>
+
+                {alert ? <p className="alert font-semibold">Zəhmət olmasa, bütün xanaları doldurun.</p> : ''}
 
                 <form className="space-y-6 rounded-md" action="" onSubmit={handleSubmit}>
 
@@ -149,20 +137,37 @@ function Registration() {
                         </div>
                     </div>
 
+                    {JSON.parse(localStorage.getItem("records")).length !== 1 ?
+                        <div className="table-row-group">
+                            {
+                                JSON.parse(localStorage.getItem("records")).map((user) => {
+                                    const {id, username, email, password} = user;
+                                    return (
+                                        <div className="table-row record" key={id}>
+                                            <div className="table-cell">{username}</div>
+                                            <div className="table-cell">{email}</div>
+                                            <div className="table-cell">{password}</div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    : 
                     <div className="table-row-group">
-                        {
-                            records.map((user) => {
-                                const {id, username, email, password} = user;
-                                return (
-                                    <div className="table-row record" key={id}>
-                                        <div className="table-cell">{username}</div>
-                                        <div className="table-cell">{email}</div>
-                                        <div className="table-cell">{password}</div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+                            {
+                                records.map((user) => {
+                                    const {id, username, email, password} = user;
+                                    return (
+                                        <div className="table-row record" key={id}>
+                                            <div className="table-cell">{username}</div>
+                                            <div className="table-cell">{email}</div>
+                                            <div className="table-cell">{password}</div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 
