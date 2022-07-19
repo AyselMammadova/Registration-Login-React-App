@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
 
 
@@ -25,10 +25,58 @@ function Registration() {
         const newRecord = {...userRegistration, id : new Date().getTime().toString()};
 
         setRecords([...records, newRecord]);
-        console.log(newRecord);
-        console.log(records)
+        // console.log(newRecord);
+        // console.log(records)
         
     }
+
+    console.log(records);
+
+    useEffect(() => {
+        localStorage.setItem("records", JSON.stringify(records));
+    })
+
+    // useEffect(() => {
+    //     JSON.parse(localStorage.getItem("records")); 
+
+    //     console.log(JSON.parse(localStorage.getItem("records")));
+    // })
+    
+
+
+    // useEffect(() => {
+
+    //     const record= window.localStorage.getItem('userRegistration');
+
+    //     if(userRegistration !== '') {
+           
+    //         setUserRegistration(JSON.parse(record));
+    //         console.log(record);
+    //     }
+    //   }, []);
+    
+    //   useEffect(() => {
+    
+    //     window.localStorage.setItem('userRegistration', userRegistration);
+    
+    //   }, [userRegistration])
+
+      
+
+    // useEffect(() => {
+    //     const records = JSON.parse(localStorage.getItem('records'));
+    //     if (records) {
+    //      setRecords(records);
+    //     }
+    //   }, []);
+
+    
+    // useEffect(() => {
+    //     localStorage.setItem('records', JSON.stringify(records));
+    //   }, [records]);
+
+      
+
 
     return (
         <>
