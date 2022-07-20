@@ -11,14 +11,16 @@ function Registration() {
     });
 
     const [records, setRecords] = useState([
-        {username: "Aysel", email: "aysel@mammad.com", password: "1e13", id: "3937rw73r9"}
+        {username: "Aysel", email: "ayselmemmedova9317@gmail.com", password: "77777", id: "3937rw73r9"}
     ]);
    
 
     const [alert, setAlert] = useState(false);
 
-    const [login, setLogin] = useState(false);
+    const [hide, setHide] = useState(true);
+
     const isInitialMount = useRef(true);
+
     const handleInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -28,25 +30,20 @@ function Registration() {
 
     useEffect(() => {
         
-       if(JSON.parse(window.localStorage.getItem("records")) !== null) {
-        // console.log('local');
-        // console.log(records);
-        
-        setRecords(JSON.parse(window.localStorage.getItem("records")));
-       }
+        if(JSON.parse(window.localStorage.getItem("records")) !== null) {
+            setRecords(JSON.parse(window.localStorage.getItem("records")));
+        }
     
-      }, []);
+    }, []);
 
     
     useEffect(()=>{
-        console.log(records);
-        if(isInitialMount.current){
-          
-                    
-        isInitialMount.current = false
-        }else{
+
+        if(isInitialMount.current) {     
+            isInitialMount.current = false
+        } else{
             localStorage.setItem("records", JSON.stringify(records));
-        console.log(records);
+            // console.log(records);
         }
 
     });
@@ -65,32 +62,20 @@ function Registration() {
             const newRecord = {...userRegistration, id : new Date().getTime().toString()};
             
             setRecords([...records, newRecord])
-            
-            
-  
-            // console.log('record', records);
-            // console.log(JSON.parse(window.localStorage.getItem("records")));
-            // localStorage.setItem("records", JSON.stringify(records));
+            setHide(false);
+
             localStorage.setItem("email", JSON.stringify(newRecord.email));
             localStorage.setItem("password", JSON.stringify(newRecord.password));
         }  
     }
 
-    // useEffect(() => {
-       
-        
-    
-    //   }, [records]);
-
-    
-    
 
     
 
 
     return (
         <>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-indigo-900">
                 Qeydiyyat Formu
             </h2>
 
@@ -151,32 +136,45 @@ function Registration() {
             </div>
 
             <div className="records mt-9">
-                <h4 className="text-center font-bold">Qeydiyyatdan keçən istifadəçi məlumatları</h4>
-                <div className="table w-full mt-3">
-                    <div className="table-header-group bg-dark-500">
-                        <div className="table-row">
-                        <div className="table-cell text-center border border-gray-500">İstifadəçi adı</div>
-                        <div className="table-cell text-center border border-gray-500">E-mail</div>
-                        <div className="table-cell text-center border border-gray-500">Şifrə</div>
+                <h3 className="text-center font-bold">
+                    Qeydiyyatdan keçən istifadəçi məlumatlarını
+                    <button className="ml-2 underline text-indigo-500 hover:no-underline" 
+                    onClick={() => setHide(!hide)}>
+                        {hide ? 'Göstər' : 'Gizlə'}
+                    </button>
+                </h3>
+
+                
+
+                {hide ? '' :
+                
+                    <div className="table w-full mt-3">
+                        <div className="table-header-group bg-dark-500 font-bold">
+                            <div className="table-row">
+                            <div className="table-cell text-center border border-gray-500 bg-gray-100">İstifadəçi adı</div>
+                            <div className="table-cell text-center border border-gray-500 bg-gray-100">E-mail</div>
+                            <div className="table-cell text-center border border-gray-500 bg-gray-100">Şifrə</div>
+                            </div>
                         </div>
+
+                        <div className="table-row-group">
+                            {
+                                records.map((user) => {
+                                    const {id, username, email, password} = user;
+                                    return (
+                                        <div className="table-row record" key={id}>
+                                            <div className="table-cell border border-gray-500 px-1">{username}</div>
+                                            <div className="table-cell border border-gray-500 px-1">{email}</div>
+                                            <div className="table-cell border border-gray-500 px-1">{password}</div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                        
                     </div>
 
-                    <div className="table-row-group">
-                        {
-                            records.map((user) => {
-                                const {id, username, email, password} = user;
-                                return (
-                                    <div className="table-row record" key={id}>
-                                        <div className="table-cell">{username}</div>
-                                        <div className="table-cell">{email}</div>
-                                        <div className="table-cell">{password}</div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                    
-                </div>
+                }
             </div>
 
         </>
